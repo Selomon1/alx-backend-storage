@@ -13,7 +13,10 @@ BEGIN
 	INNER JOIN projects ON projects.id = corrections.project_id;
 
 	UPDATE users
-	SET average_score = total_score / total_weight;
+	SET average_score = total_score;
+
+	UPDATE users
+	SET average_score = average_score / total_weight;
 
 END //
 DELIMITER ;
