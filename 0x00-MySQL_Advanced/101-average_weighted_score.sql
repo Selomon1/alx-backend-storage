@@ -10,7 +10,7 @@ BEGIN
 	SELECT SUM(corrections.score * projects.weight), SUM(projects.weight)
 	INTO total_score, total_weight
 	FROM corrections
-	INNER JOIN projects ON corrections.project_id = projects.id;
+	INNER JOIN projects ON projects.id = corrections.project_id;
 
 	UPDATE users
 	SET average_score = total_score / total_weight;
