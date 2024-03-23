@@ -1,5 +1,7 @@
 -- Create the stored procedure
+
 DELIMITER //
+
 CREATE PROCEDURE ComputeAverageWeightedScoreForUsers()
 BEGIN
 	-- Declare variables
@@ -7,16 +9,14 @@ BEGIN
 	DECLARE total_weight FLOAT;
 
 	-- Calculate total score and weight
-	SELECT SUM(corrections.score * projects.weight), SUM(projects.weight)
+	SELECT SUM(c.score * p.weight), SUM(p.weight)
 	INTO total_score, total_weight
-	FROM corrections
-	INNER JOIN projects ON projects.id = corrections.project_id;
+	FROM corrections c
+	JOIN projects p ON c.project_id = p.id;
 
 	UPDATE users
-	SET average_score = total_score;
-
-	UPDATE users
-	SET average_score = average_score / total_weight;
+	SET average_score = total_score / total_weight;
 
 END //
+
 DELIMITER ;
