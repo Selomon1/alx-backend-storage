@@ -1,0 +1,2 @@
+// Script to list documents with name-"Holberton school" in the school collect
+db.school.find({ "name": "Holberton school" }).forEach(printjson)
