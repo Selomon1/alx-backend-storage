@@ -7,6 +7,10 @@ from pymongo import MongoClient
 
 
 def log_stats():
+    """
+    Analyze Nginx logs stored in MongoDB and display stats
+    """
+    # Connect to MongoDB
     client = MongoClient()
     db = client.logs
     collection = db.nginx
