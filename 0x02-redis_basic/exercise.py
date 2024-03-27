@@ -62,8 +62,7 @@ class Cache:
         self._redis.set(key, data)
         return key
 
-    def get(self, key: str, fn: Optional[Callable] = None)
-        -> Union[str, bytes, int, float]:
+    def get(self, key: str, fn: Callable = None):
         """
         Retrieves data from Redis using the key and optionally applies
         a conversion function
@@ -73,17 +72,23 @@ class Cache:
             return fn(value)
         return value
 
-    def get_str(self, key: str) -> str:
+    def get_str(self, key: str) -> Union[str, None]:
         """
         Retrieves data from Redis using the key & convert it to a string
         """
-        return self.get(key, fn=lambda x: x.decode('utf-8'))
+        value = self._redis.get(key)
+        if value is not None:
+            return value.decode('utf-8')
+        return None
 
-    def get_int(self, key: str) -> int:
+    def get_int(self, key: str) -> Union[int, None]:
         """
         Retrieves data from Redis using the key & converts it to an integer
         """
-        return self.get(key, fn=int)
+        value = self._redis.get(key)
+        if value is not None:
+            return int(value.decode("utf-8")
+        return None
 
 def replay(method: Callable) -> None:
     """
