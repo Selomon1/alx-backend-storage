@@ -19,15 +19,15 @@ def count_access(func):
         redis_client = redis.Redis()
         redis_client.incr(f"count:{url}")
 
-        catched_content = redis_client.get(url)
+        cached_content = redis_client.get(url)
         if cached_content:
             retutn cached_content.decode('utf-8')
         else:
             response = requests.get(url)
             page_content = response.text
             redis_client.setex(url, 10, page_content)
-            return page_content
-        return wrapper_get_page
+        return page_content
+    return wrapper_get_page
 
 
 @count_access
