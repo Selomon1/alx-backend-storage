@@ -87,7 +87,7 @@ class Cache:
         """
         value = self._redis.get(key)
         if value is not None:
-            return int(value.decode("utf-8")
+            return int(value.decode("utf-8"))
         return None
 
 def replay(method: Callable) -> None:
