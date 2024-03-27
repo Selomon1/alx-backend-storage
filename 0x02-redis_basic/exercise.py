@@ -3,7 +3,7 @@
 Redis basic tasks
 """
 import redis
-from typing import Callable
+from typing import Callable, Union
 import functools
 import uuid
 
@@ -20,7 +20,7 @@ class Cache:
         self._redis = redis.Redis()
         self._redis.flushdb()
 
-    def store(self, data) -> str:
+    def store(self, data: Union[str, bytes, int, float]) -> str:
         """
         generates random key, store the input data in Redis
         """
