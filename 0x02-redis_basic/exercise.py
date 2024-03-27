@@ -4,7 +4,7 @@ Redis basic tasks
 """
 import redis
 from typing import Callable, Optional, Union
-from functools import wrapper
+from functools import wraps
 import uuid
 
 
@@ -12,6 +12,7 @@ def count_calls(method: Callable) -> Callable:
     """
     Decorator to count the number of times a method is called
     """
+    @wraps(method)
     def wrapper(self, *args, **kwargs):
         """
         Wrapper func to increment call count and call the original method
@@ -25,6 +26,7 @@ def call_history(method: Callable) -> Callable:
     """
     Decorator to store the history of inputs and outputs for part. function.
     """
+    @wraps(method)
     def wrapper(self, *args, **kwargs):
         """
         Wrapper function to store input and output history, and call the orgi
