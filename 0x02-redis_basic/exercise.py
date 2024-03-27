@@ -4,7 +4,7 @@ Redis basic tasks
 """
 import redis
 from typing import Callable, Optional, Union
-import functools import wrapper
+from functools import wrapper
 import uuid
 
 
