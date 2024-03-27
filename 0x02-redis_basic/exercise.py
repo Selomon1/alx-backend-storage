@@ -22,6 +22,7 @@ def count_calls(method: Callable) -> Callable:
         return method(self, *args, **kwargs)
     return wrapper
 
+
 def call_history(method: Callable) -> Callable:
     """
     Decorator to store the history of inputs and outputs for part. function.
@@ -39,6 +40,7 @@ def call_history(method: Callable) -> Callable:
         self._redis.rpush(outputs_key, output)
         return output
     return wrapper
+
 
 class Cache:
     """
@@ -90,6 +92,7 @@ class Cache:
             return int(value.decode("utf-8"))
         return None
 
+
 def replay(method: Callable) -> None:
     """
     Function to display the history of calls of particular function
@@ -100,7 +103,7 @@ def replay(method: Callable) -> None:
     redis = method.__self__._redis
     totalCalls = int(redis.get(key).decode("utf-8"))
     print(f"{key} was called {totalCalls} times:")
-    inputs = self._redis.lrange(inputs_key, 0, -1)
-    outputs = self._redis.lrange(outputs_key, 0, -1)
-    for input_, output in zip(inputs, outputs):
-        print(f"{key}(*{input_}) -> {output}")
+    inputs = redis.lrange(inputs_key, 0, -1)
+    outputs = redis.lrange(outputs_key, 0, -1)
+    for i, j in zip(inputs, outputs):
+        print(f"{key}(*{i.decode('utf-8')}) -> {j.decode('utf')}")
