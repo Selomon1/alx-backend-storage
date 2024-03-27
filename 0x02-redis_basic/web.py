@@ -36,7 +36,7 @@ def count_access(func: Callable) -> Callable:
         else:
             response = func(url)
             redis_client.set(url, ex=10, response)
-            return response
+        return response
     return wrapper
 
 
