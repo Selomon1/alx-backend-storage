@@ -6,11 +6,8 @@ get page module
 import requests
 import redis
 import time
+from typing import Callable
 from functools import wraps
-
-
-# Initialize Redis Client
-redis_client = redis.Redis()
 
 
 def count_access(func):
@@ -18,32 +15,22 @@ def count_access(func):
     Decorator to track URL access
     """
     @wraps(func)
-    def wrapper(url):
-        count_key = f"count:{url}"
-        redis_client.incr(count_key)
-        return func(url)
-    return wrapper
+    def wrapper_get_page(url):
+        redis_client = redis.Redis()
+        redis_client.incr(f"count:{url}")
 
-
-def cache_expiry(func):
-    """
-    Decorator to cache
-    """
-    @wraps(func)
-    def wrapper(url):
-        cache_key = f"cache:{url}"
-        cached_result = redis_client.get(cache_key)
-        if cached_result:
-            return cached_result.decode('utf-8')
+        catched_content = redis_client.get(url)
+        if cached_content:
+            retutn cached_content.decode('utf-8')
         else:
-            result = dunc(url)
-            redis_client.setex(cache_key, 10, result)
-            return result
-        return wrapper
+            response = requests.get(url)
+            page_content = response.text
+            redis_client.setex(url, 10, page_content)
+            return page_content
+        return wrapper_get_page
 
 
 @count_access
-@cache_expiry
 def get_page(url: str) -> str:
     """
     Fetch the HTML content of a given URL
