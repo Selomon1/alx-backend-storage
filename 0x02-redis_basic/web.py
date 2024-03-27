@@ -5,7 +5,6 @@ get page module
 
 import requests
 import redis
-import time
 from typing import Callable
 from functools import wraps
 
@@ -14,7 +13,6 @@ def count_access(func):
     """
     Decorator to track URL access
     """
-    @wraps(func)
     def wrapper_get_page(url):
         redis_client = redis.Redis()
         redis_client.incr(f"count:{url}")
