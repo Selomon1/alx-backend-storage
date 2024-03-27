@@ -9,7 +9,7 @@ from typing import Callable
 from functools import wraps
 
 
-def count_access(calls: Callable) -> Callable:
+def count_access(func: Callable) -> Callable:
     """
     Decorator to track URL access
     Param:
@@ -18,8 +18,8 @@ def count_access(calls: Callable) -> Callable:
     Returns:
         wrapper that tracks the count of access to url
     """
-    @wraps(calls)
-    def wrapper(url):
+    @wraps(func)
+    def wrapper(url: str) -> str:
         """
         Retrieves the HTML content of the given URL
         Params:
@@ -34,10 +34,9 @@ def count_access(calls: Callable) -> Callable:
         if cached_content:
             return cached_content.decode('utf-8')
         else:
-            response = requests.get(url)
-            page_content = response.text
-            redis_client.setex(url, 10, page_content)
-        return page_content
+            response = func(url)
+            redis_client.setex(url, 10, response)
+            return response
     return wrapper
 
 
