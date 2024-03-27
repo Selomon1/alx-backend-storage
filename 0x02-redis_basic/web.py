@@ -35,7 +35,7 @@ def count_access(func: Callable) -> Callable:
             return cached_content.decode('utf-8')
         else:
             response = func(url)
-            redis_client.setex(url, 10, response)
+            redis_client.set(url, ex=10, response)
             return response
     return wrapper
 
